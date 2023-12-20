@@ -1,6 +1,6 @@
 const {getPhotoImageUrl} = require("../config/photoImageUploader.js");
 const photoImageUploadHandler = async(req,res)=>{
-
+console.log("Please Upload Photo");
     const {name,base64} = req.body;
     const url = await getPhotoImageUrl(base64,name)
  res.json({url});

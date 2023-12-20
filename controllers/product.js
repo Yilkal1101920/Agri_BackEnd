@@ -1,5 +1,5 @@
 // Import function from Product Model
-const { getProducts, getOrderedProducts, getProductsWithFavorate, getOrdersByEmail, getOrderByEmailProductId, getOrderByEmailProductIdPaymentStatus, getProductRateById, getProductRateByIdd, getProductRateByIdAndEmail, getProductById, getProductByIdforVmodel, getOrderByOrderId, getOrderWithSelect, getFavoriteByEmail, getCPID, getPostedAmountByKebeleAndName, insertProduct, insertOrder, insertFavorite, insertCPID, updateProductById, updateProductInMarketById, updateProductByIdforCartConfirmation, updateOrderByOrderId, updateOrderByProductIdAndEmail, updateOrderforPayment, updateProductRateByProductId, updateProductRateByProductIdAndEmail, rollBackProductInToStore, rollBackAmount, rollBackProductAmountInMarket, editProductById, updateOrderById, updateProductByEmailProducNameAndKebele, editProductByProductIdforMarket, rejectProductforMarketByProductId, updateProductAmountByProductId, deleteProductById, deleteUserById, deleteOrderById, deleteOrderByKebeleAndId } = require("../models/productModel.js");
+const { getProducts, getOrderedProducts, getOrdersByEmail, getOrderByEmailProductId, getOrderByEmailProductIdPaymentStatus, getProductById, getProductByIdforVmodel, getOrderByOrderId, getOrderWithSelect, getPostedAmountByKebeleAndName, insertProduct, insertOrder, updateProductById, updateProductInMarketById, addProductInToMarket, updateProductByIdforCartConfirmation, updateOrderByOrderId, updateOrderByProductIdAndEmail, updateOrderforPayment, rollBackProductInToStore, rollBackAmount, rollBackProductAmountInMarket, editProductById, updateOrderById, updateProductByEmailProducNameAndKebele, editProductByProductIdforMarket, rejectProductforMarketByProductId, updateProductAmountByProductId, activateFarmerProduct, deleteProductById, deleteUserById, deleteOrderById, deleteOrderByKebeleAndId, deleteOrderByEmail } = require("../models/productModel.js");
 
 // Get All Products
  const showProducts = async (req, res) => {
@@ -13,20 +13,6 @@ const { getProducts, getOrderedProducts, getProductsWithFavorate, getOrdersByEma
     });
 }
 
-
-const showCPID = async (req, res) => {
-
-    
-    getCPID((err, results) => {
-        if (err){
-            res.send(err);
-        }else{
-            res.json(results);
-        }
-    });
-}
-
-
 const showOrderedProducts = async (req, res) => {
 
     
@@ -38,55 +24,6 @@ const showOrderedProducts = async (req, res) => {
         }
     });
 }
-
-
- const showProductsWithFavorate = async (req, res) => {
-
-    
-    getProductsWithFavorate((err, results) => {
-        if (err){
-            res.send(err);
-        }else{
-            res.json(results);
-        }
-    });
-}
-
- const showProductRateById = async (req, res) => {
-
-    
-    getProductRateById(req.params.id, (err, results) => {
-        if (err){
-            res.send(err);
-        }else{
-            res.json(results);
-        }
-    });
-}
-
-
-const showProductRateByIdd = async (req, res) => {
-    getProductRateByIdd(req.params.id, (err, results) => {
-        if (err){
-            res.send(err);
-        }else{
-            res.json(results);
-        }
-    });
-}
-
-const showProductRateByIdAndEmail = async (req, res) => {
-
-    
-    getProductRateByIdAndEmail(req.params.id, req.params.email, (err, results) => {
-        if (err){
-            res.send(err);
-        }else{
-            res.json(results);
-        }
-    });
-}
-
 
 // Get All Orders
  const showOrdersByEmail = async (req, res) => {
@@ -190,43 +127,6 @@ insertProduct(data, (err, results) => {
     });
 }
 
-const createCPID = (req, res) => {
-    const data = req.body;
-console.log(data)
-
-insertCPID(data, (err, results) => {
-        if (err){
-            res.send(err);
-        }else{
-            res.json(results);
-        }
-    });
-}
-
-// Create New Product
- const createFavorite = (req, res) => {
-    const data = req.body;
-
-insertFavorite(data, (err, results) => {
-        if (err){
-            res.send(err);
-        }else{
-            res.json(results);
-        }
-    });
-}
-
- const showFavoriteByEmail = (req, res) => {
-    getFavoriteByEmail(req.params.id, (err, results) => {
-        if (err){
-            res.send(err);
-        }else{
-            res.json(results);
-        }
-    });
-}
-
-
 // Create New Order
  const createOrder = (req, res) => {
     const data = req.body;
@@ -278,6 +178,18 @@ const updateProductInMarket = (req, res) => {
     });
 }
 
+const addProductToMarket = (req, res) => {
+    const data  = req.body;
+    const id    = req.params.id;
+    addProductInToMarket(data, id, (err, results) => {
+        if (err){
+            res.send(err);
+        }else{
+            res.json(results);
+        }
+    });
+}
+
 const updateProductByEmailKebeleAndProductName = (req, res) => {
     const data  = req.body;
     const email = req.params.email;
@@ -310,31 +222,6 @@ const updateOrderByEmailAndProductId = (req, res) => {
     const email = req.params.email;
     const id = req.params.id;
     updateOrderByProductIdAndEmail(data, email, id, (err, results) => {
-        if (err){
-            res.send(err);
-        }else{
-            res.json(results);
-        }
-    });
-}
-
- const updateProductRateById = (req, res) => {
-    const data  = req.body;
-    const id    = req.params.id;
-    updateProductRateByProductId(data, id, (err, results) => {
-        if (err){
-            res.send(err);
-        }else{
-            res.json(results);
-        }
-    });
-}
-
-const updateProductRateByIdAndEmail = (req, res) => {
-    const data  = req.body;
-    const id    = req.params.id;
-    const email = req.params.email;
-    updateProductRateByProductIdAndEmail(data, id, email, (err, results) => {
         if (err){
             res.send(err);
         }else{
@@ -442,10 +329,28 @@ const updateProductAmountbyProductId = (req, res) => {
     });
 }
 
+
 const rejectProductByProductIdforMarket = (req, res) => {
     const data  = req.body;
     const pid    = req.params.pid;
     rejectProductforMarketByProductId(data, pid, (err, results) => {
+        if (err){
+            console.log("Yilkal");
+            res.send(err);
+            console.log("Ayinalem");
+        }else{
+            console.log("eeeeeeeeeee");
+            res.send(results)
+            console.log("rrrrrrrrrrrrr");
+        }
+    });
+}
+
+
+const approveFarmerProduct = (req, res) => {
+    const data  = req.body;
+    const id    = req.params.id;
+    activateFarmerProduct(data, id, (err, results) => {
         if (err){
             res.send(err);
         }else{
@@ -453,7 +358,6 @@ const rejectProductByProductIdforMarket = (req, res) => {
         }
     });
 }
-
 
  
 // Delete Product
@@ -483,11 +387,18 @@ const deleteOrder = (req, res) => {
 const deleteOrderByIdAndKebele = (req, res) => {
     const id = req.params.id;
     const kebele = req.params.kebele;
-    console.log("Yilkal");
-    console.log(id);
-    console.log(kebele);
-    console.log("Temesgen");
     deleteOrderByKebeleAndId(id, kebele, (err, results) => {
+        if (err){
+            res.send(err);
+        }else{
+            res.json(results);
+        }
+    });
+}
+
+const deleteOrderByUserEmail = (req, res) => {
+    const email = req.params.email;
+    deleteOrderByEmail(email, (err, results) => {
         if (err){
             res.send(err);
         }else{
@@ -509,11 +420,12 @@ const deleteOrderByIdAndKebele = (req, res) => {
 }
 
 module.exports = {
-    showProducts, showOrderedProducts, showProductsWithFavorate, showProductRateById, showProductRateByIdd, showProductRateByIdAndEmail, showOrdersByEmail, showOrderByEmailProductId,
+    showProducts, showOrderedProducts, showOrdersByEmail, showOrderByEmailProductId,
     showOrderByEmailProductIdPaymentStatus,
-    showOrderWithSelect, showProductById, showProductByIdforVmodel, showOrderByOrderId, showCPID,
-    createProduct, createFavorite, createCPID, showFavoriteByEmail, showPostedAmountByKebeleAndName, createOrder, updateProduct, updateProductInMarket,
-    updateProductRateById, updateProductRateByIdAndEmail, confirmOrderByOrderId, updateProductforCartConfirmation, 
-    rollBackAmountUpdate, rollBackProductAmountInMarketUpdate, editProduct, rollBackProductFromMarketToStore, updateOrder, updateOrderByEmailAndProductId, updateOrderByOrderIdforPayment, updateProductByEmailKebeleAndProductName, updateProductByProductIdforMarket, 
-    rejectProductByProductIdforMarket, updateProductAmountbyProductId, deleteProduct, deleteUser, deleteOrder, deleteOrderByIdAndKebele
+    showOrderWithSelect, showProductById, showProductByIdforVmodel, showOrderByOrderId,
+    createProduct, showPostedAmountByKebeleAndName, createOrder, updateProduct, updateProductInMarket, addProductToMarket,
+    confirmOrderByOrderId, updateProductforCartConfirmation, 
+    rollBackAmountUpdate, rollBackProductAmountInMarketUpdate, editProduct, rollBackProductFromMarketToStore,
+    updateOrder, updateOrderByEmailAndProductId, updateOrderByOrderIdforPayment, updateProductByEmailKebeleAndProductName, updateProductByProductIdforMarket, 
+    rejectProductByProductIdforMarket, updateProductAmountbyProductId, approveFarmerProduct, deleteProduct, deleteUser, deleteOrder, deleteOrderByIdAndKebele, deleteOrderByUserEmail
 }

@@ -43,6 +43,22 @@ const getUserByEmail = (email, result) => {
      }); 
  }
 
+ const getUserByKebeleAndRole = (kebele, role, result) => {
+    console.log("Birhan");
+    DB.db.query("SELECT * FROM users WHERE kebele = ? AND user_role = ?", [kebele, role], async (err, results) => {  
+         if(err) {
+             result(err, null);
+             console.log("ERROR");
+             console.log(err);
+             console.log("ERROR");
+         } else {
+             result(null, results[0]);
+         }
+     }); 
+ }
+
+
+
  const getUserByEmailAndPassword = (email, password, result) => {
 
     DB.db.query("SELECT * FROM users WHERE email = ?", [email],async (err, results) => {  
@@ -85,8 +101,56 @@ console.log("ad",ad);
      }); 
  }
 
+ const getMahiberat = (result) => {
+    DB.db.query("SELECT DISTINCT kebele FROM users WHERE user_role = ? OR user_role = ?", ["store", "manager"], (err, results) => {             
+        if(err) {
+            console.log(err);
+            result(err, null);
+        } else {
+            result(null, results);
+        }
+    });   
+}
+const getFarmers = (result) => {
+    DB.db.query("SELECT DISTINCT fName, faName, patent_email, user_email FROM ordertable INNER JOIN users ON ordertable.patent_email = users.email WHERE user_role = ? AND payStatus = ?", ['user', 0], (err, results) => {             
+        if(err) {
+            console.log(err);
+            result(err, null);
+        } else {
+            result(null, results);
+        }
+    });   
+} 
+
+const getSellers = (result) => {
+    DB.db.query("SELECT DISTINCT fName, faName, patent_email, user_email FROM ordertable INNER JOIN users ON ordertable.patent_email = users.email WHERE payStatus = ?", [1], (err, results) => {             
+        if(err) {
+            console.log(err);
+            result(err, null);
+        } else {
+            result(null, results);
+        }
+    });   
+} 
+
+
 const updateUserInfoByEmaill = (data, email, result) => {
     DB.db.query("UPDATE users SET subKebele = ?, village = ?, phone = ? Where email = ?", [data.subKebele, data.village, data.phone, data.email], (err, results) => {             
+        if(err) {
+            console.log(err);
+            result(err, null);
+        } else {
+            result(null, results);
+        }
+    });   
+}
+
+const changePassword = (data, email, result) => {
+    var hashPassword = data.password;
+    hashPassword = hash.MD5(data.password);
+
+    data.password = hashPassword;
+    DB.db.query("UPDATE users SET password = ? Where email = ?", [data.password, email], (err, results) => {             
         if(err) {
             console.log(err);
             result(err, null);
@@ -161,5 +225,6 @@ const deleteUserByEmail = (email, result) => {
         }
     });   
 }
-module.exports={insertUser, activateAccountByUsername, getUsers, getUserByEmail, getUserByEmailAndPassword, getUserByMahiberatId, updateUserInfoByEmaill, updateUserInfobyEmail, changeAccount,
+module.exports={insertUser, activateAccountByUsername, getUsers, getUserByEmail, getUserByKebeleAndRole, getUserByEmailAndPassword, getUserByMahiberatId, getMahiberat, getFarmers, getSellers, updateUserInfoByEmaill, 
+    updateUserInfobyEmail, changeAccount, changePassword,
     deActivateMahiberatUserAccount, deleteUserByEmail}

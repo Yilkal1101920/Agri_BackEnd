@@ -33,4 +33,15 @@ const getProductRateAndFavoriteByUserEmailAndProductId = (email, id, result) => 
      });   
  }
 
-module.exports={ insertProductRateAndFavorite, getProductRateAndFavorite, getProductRateAndFavoriteByUserEmailAndProductId }
+ const updateProductRateByfIdd = (data, id, result) => {
+    DB.db.query("UPDATE ratingandfavorite SET star = ? WHERE favorite_id = ?", [data.star, id], (err, results) => {             
+        if(err) {
+            console.log(err);
+            result(err, null);
+        } else {
+            result(null, results);
+        }
+    });   
+}
+
+module.exports={ insertProductRateAndFavorite, getProductRateAndFavorite, getProductRateAndFavoriteByUserEmailAndProductId, updateProductRateByfIdd }

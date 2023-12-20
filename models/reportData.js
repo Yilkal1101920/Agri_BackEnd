@@ -10,6 +10,7 @@ const insertReport = (data, result) => {
             result(err, null);
         } else {
             result(null, results);
+            console.log("Successfully Inserted");
         }
     });   
 }
@@ -25,4 +26,26 @@ const getReports = (result) => {
     });   
 }
 
-module.exports = { insertReport, getReports }
+const getYear = (result) => {
+    DB.db.query("SELECT DISTINCT year FROM report", (err, results) => {             
+        if(err) {
+            console.log(err);
+            result(err, null);
+        } else {
+            result(null, results);
+        }
+    });   
+}
+
+const updateTransferStatusById = (id, result) => {
+    DB.db.query("UPDATE report SET transfer_status = ? Where report_id = ?", [1, id], (err, results) => {             
+        if(err) {
+            console.log(err);
+            result(err, null);
+        } else {
+            result(null, results);
+        }
+    });   
+}
+
+module.exports = { insertReport, getReports, getYear, updateTransferStatusById }

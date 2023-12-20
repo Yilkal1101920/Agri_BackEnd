@@ -1,5 +1,5 @@
 // Import function from user Model
-const { insertUser, activateAccountByUsername, getUsers, getUserByEmail, getUserByEmailAndPassword, getUserByMahiberatId, updateUserInfoByEmaill, updateUserInfobyEmail, changeAccount, deActivateMahiberatUserAccount, deleteUserByEmail} = require("../models/userData.js");
+const { insertUser, activateAccountByUsername, getUsers, getUserByEmail, getUserByKebeleAndRole, getUserByEmailAndPassword, getUserByMahiberatId, getMahiberat, getFarmers, getSellers, updateUserInfoByEmaill, updateUserInfobyEmail, changeAccount, changePassword, deActivateMahiberatUserAccount, deleteUserByEmail} = require("../models/userData.js");
 // Create New User
  const createUser = (req, res) => {
     const data = req.body;
@@ -46,6 +46,16 @@ const showUserByEmail = (req, res) => {
     });
 }
 
+const showUserByKebeleAndRole = (req, res) => {
+    getUserByKebeleAndRole(req.params.kebele, req.params.role, (err, results) => {
+        if (err){
+            res.send(err);
+        }else{
+            res.json(results);
+        }
+    });
+}
+
 const showUserByEmailAndPassword = (req, res) => {
     getUserByEmailAndPassword(req.params.email, req.params.password, (err, results) => {
         if (err){
@@ -66,6 +76,34 @@ const showUserByMahiberatId = (req, res) => {
     });
 }
 
+const showMahiberat = (req, res) => {
+    getMahiberat((err, results) => {
+        if (err){
+            res.send(err);
+        }else{
+            res.json(results);
+        }
+    });
+}
+
+const showFarmers = (req, res) => {
+    getFarmers((err, results) => {
+        if (err){
+            res.send(err);
+        }else{
+            res.json(results);
+        }
+    });
+}
+const showSellers = (req, res) => {
+    getSellers((err, results) => {
+        if (err){
+            res.send(err);
+        }else{
+            res.json(results);
+        }
+    });
+}
 const updateUserByEmaill = (req, res) => {
     const data  = req.body;
     const email    = req.params.email;
@@ -102,6 +140,18 @@ const updateAccount = (req, res) => {
     });
 }
 
+const newPassword = (req, res) => {
+    const data  = req.body;
+    const email    = req.params.email;
+    changePassword(data, email, (err, results) => {
+        if (err){
+            res.send(err);
+        }else{
+            res.json(results);
+        }
+    });
+}
+
 const deActivateUserAccount = (req, res) => {
     const data  = req.body;
     const email    = req.params.email;
@@ -125,6 +175,7 @@ const deleteUserbyEmail = (req, res) => {
     });
 }
 module.exports={
-    createUser, createAccountByUsername, showUsers, showUserByEmail, showUserByEmailAndPassword, showUserByMahiberatId, updateUserByEmaill, updateUserbyEmail, updateAccount,
+    createUser, createAccountByUsername, showUsers, showUserByEmail, showUserByKebeleAndRole, showUserByEmailAndPassword, showUserByMahiberatId, showMahiberat, showFarmers, showSellers, updateUserByEmaill, updateUserbyEmail, 
+    updateAccount, newPassword, 
     deActivateUserAccount, deleteUserbyEmail
 }
